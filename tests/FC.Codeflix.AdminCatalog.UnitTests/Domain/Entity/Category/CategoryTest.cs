@@ -1,8 +1,8 @@
-using FluentAssertions;
+using Shouldly;
 
 namespace FC.Codeflix.AdminCatalog.UnitTests.Domain.Entity.Category;
 
-using DomainEntity = FC.Codeflix.AdminCatalog.Domain.Entity;
+using DomainEntity = FC.Codeflix.AdminCatalog.Domain.Categories;
 
 [Collection(nameof(CategoryTestFixture))]
 public class CategoryTest(CategoryTestFixture fixture)
@@ -30,13 +30,13 @@ public class CategoryTest(CategoryTestFixture fixture)
         var sut = DomainEntity.Category.Create(input.Name, input.Description);
         
         // THEN
-        sut.IsSuccess.Should().BeTrue();
-        sut.Value.Should().NotBeNull();
-        sut.Value.Name.Should().Be(input.Name);
-        sut.Value.Description.Should().Be(input.Description);
-        sut.Value.Id.Should().NotBeEmpty();
-        sut.Value.CreatedAt.Should().NotBe(default);
-        sut.Value.IsActive.Should().BeTrue();
+        sut.IsSuccess.ShouldBeTrue();
+        sut.Value.ShouldNotBeNull();
+        sut.Value.Name.ShouldBe(input.Name);
+        sut.Value.Description.ShouldBe(input.Description);
+        sut.Value.Id.ShouldNotBe(Guid.Empty); 
+        sut.Value.CreatedAt.ShouldNotBe(default);
+        sut.Value.IsActive.ShouldBeTrue();
     }
 
     [Theory]
@@ -52,13 +52,13 @@ public class CategoryTest(CategoryTestFixture fixture)
         var sut = DomainEntity.Category.Create(input.Name, input.Description, isActive);
         
         // THEN
-        sut.IsSuccess.Should().BeTrue();
-        sut.Value.Should().NotBeNull();
-        sut.Value.Name.Should().Be(input.Name);
-        sut.Value.Description.Should().Be(input.Description);
-        sut.Value.Id.Should().NotBeEmpty();
-        sut.Value.CreatedAt.Should().NotBe(default);
-        sut.Value.IsActive.Should().Be(isActive);
+        sut.IsSuccess.ShouldBeTrue();
+        sut.Value.ShouldNotBeNull();
+        sut.Value.Name.ShouldBe(input.Name);
+        sut.Value.Description.ShouldBe(input.Description);
+        sut.Value.Id.ShouldNotBe(Guid.Empty);
+        sut.Value.CreatedAt.ShouldNotBe(default);
+        sut.Value.IsActive.ShouldBe(isActive);
     }
 
     [Theory]
@@ -75,8 +75,8 @@ public class CategoryTest(CategoryTestFixture fixture)
         var sut = DomainEntity.Category.Create(name!, input.Description);
         
         // THEN
-        sut.IsFailure.Should().BeTrue();
-        sut.Error.Should().Be("Name must not be blank");
+        sut.IsFailure.ShouldBeTrue();
+        sut.Error.ShouldBe("Name must not be blank");
     }
     
     [Theory]
@@ -91,8 +91,8 @@ public class CategoryTest(CategoryTestFixture fixture)
         var sut = DomainEntity.Category.Create(name!, input.Description);
         
         // THEN
-        sut.IsFailure.Should().BeTrue();
-        sut.Error.Should().Be("Name must contain at least 3 characters");
+        sut.IsFailure.ShouldBeTrue();
+        sut.Error.ShouldBe("Name must contain at least 3 characters");
     }
 
     [Fact]
@@ -107,8 +107,8 @@ public class CategoryTest(CategoryTestFixture fixture)
         var sut = DomainEntity.Category.Create(name, input.Description);
         
         // THEN
-        sut.IsFailure.Should().BeTrue();
-        sut.Error.Should().Be("Name must contain at most 255 characters");
+        sut.IsFailure.ShouldBeTrue();
+        sut.Error.ShouldBe("Name must contain at most 255 characters");
     }
 
     [Theory]
@@ -124,8 +124,8 @@ public class CategoryTest(CategoryTestFixture fixture)
         var sut = DomainEntity.Category.Create(input.Name, description!);
         
         // THEN
-        sut.IsFailure.Should().BeTrue();
-        sut.Error.Should().Be("Description must not be blank");
+        sut.IsFailure.ShouldBeTrue();
+        sut.Error.ShouldBe("Description must not be blank");
     }
     
     [Fact]
@@ -140,8 +140,8 @@ public class CategoryTest(CategoryTestFixture fixture)
         var sut = DomainEntity.Category.Create(input.Name, description);
         
         // THEN
-        sut.IsFailure.Should().BeTrue();
-        sut.Error.Should().Be("Description must contain at most 10000 characters");
+        sut.IsFailure.ShouldBeTrue();
+        sut.Error.ShouldBe("Description must contain at most 10000 characters");
     }
 
     [Fact]
@@ -150,20 +150,20 @@ public class CategoryTest(CategoryTestFixture fixture)
     {
         // GIVEN
         var category = fixture.GetInactiveCategory();
-        category.IsActive.Should().BeFalse();
-        category.UpdatedAt.Should().Be(default);
+        category.IsActive.ShouldBeFalse();
+        category.UpdatedAt.ShouldBe(default);
 
         // WHEN
         var result = category.Activate();
         
         // THEN
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Should().NotBeNull();
+        result.IsSuccess.ShouldBeTrue();
+        result.Value.ShouldNotBeNull();
         var updatedCategory = result.Value;
-        updatedCategory.IsActive.Should().BeTrue();
-        updatedCategory.UpdatedAt.Should().NotBe(default);
-        updatedCategory.Name.Should().Be(category.Name);
-        updatedCategory.Description.Should().Be(category.Description);
+        updatedCategory.IsActive.ShouldBeTrue();
+        updatedCategory.UpdatedAt.ShouldNotBe(default);
+        updatedCategory.Name.ShouldBe(category.Name);
+        updatedCategory.Description.ShouldBe(category.Description);
     }
     
     [Fact]
@@ -172,20 +172,20 @@ public class CategoryTest(CategoryTestFixture fixture)
     {
         // GIVEN
         var category = fixture.GetActiveCategory();
-        category.IsActive.Should().BeTrue();
-        category.UpdatedAt.Should().Be(default);
+        category.IsActive.ShouldBeTrue();
+        category.UpdatedAt.ShouldBe(default);
         
         // WHEN
         var result = category.Deactivate();
         
         // THEN
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Should().NotBeNull();
+        result.IsSuccess.ShouldBeTrue();
+        result.Value.ShouldNotBeNull();
         var updatedCategory = result.Value;
-        updatedCategory.IsActive.Should().BeFalse();
-        updatedCategory.UpdatedAt.Should().NotBe(default);
-        updatedCategory.Name.Should().Be(category.Name);
-        updatedCategory.Description.Should().Be(category.Description);
+        updatedCategory.IsActive.ShouldBeFalse();
+        updatedCategory.UpdatedAt.ShouldNotBe(default);
+        updatedCategory.Name.ShouldBe(category.Name);
+        updatedCategory.Description.ShouldBe(category.Description);
     }
 
     [Fact]
@@ -194,19 +194,19 @@ public class CategoryTest(CategoryTestFixture fixture)
     {
         // GIVEN
         var category = fixture.GetActiveCategory();
-        category.UpdatedAt.Should().Be(default);
+        category.UpdatedAt.ShouldBe(default);
         var name = fixture.GenerateName();
         
         // WHEN
         var result = category.Update(name: name);
         
         // THEN
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Should().NotBeNull();
+        result.IsSuccess.ShouldBeTrue();
+        result.Value.ShouldNotBeNull();
         var updatedCategory = result.Value;
-        updatedCategory.Name.Should().Be(name);
-        updatedCategory.Description.Should().Be(category.Description);
-        updatedCategory.UpdatedAt.Should().NotBe(default);
+        updatedCategory.Name.ShouldBe(name);
+        updatedCategory.Description.ShouldBe(category.Description);
+        updatedCategory.UpdatedAt.ShouldNotBe(default);
     }
     
     [Theory]
@@ -217,14 +217,14 @@ public class CategoryTest(CategoryTestFixture fixture)
     {
         // GIVEN
         var category = fixture.GetActiveCategory();
-        category.UpdatedAt.Should().Be(default);
+        category.UpdatedAt.ShouldBe(default);
         
         // WHEN
         var result = category.Update(invalidName);
         
         // THEN
-        result.IsFailure.Should().BeTrue();
-        result.Error.Should().Be("Name must not be blank");
+        result.IsFailure.ShouldBeTrue();
+        result.Error.ShouldBe("Name must not be blank");
     }
     
     [Theory]
@@ -234,14 +234,14 @@ public class CategoryTest(CategoryTestFixture fixture)
     {
         // GIVEN
         var category = fixture.GetActiveCategory();
-        category.UpdatedAt.Should().Be(default);
+        category.UpdatedAt.ShouldBe(default);
         
         // WHEN
         var result = category.Update(invalidName);
         
         // THEN
-        result.IsFailure.Should().BeTrue();
-        result.Error.Should().Be("Name must contain at least 3 characters");
+        result.IsFailure.ShouldBeTrue();
+        result.Error.ShouldBe("Name must contain at least 3 characters");
     }
     
     [Fact]
@@ -250,15 +250,15 @@ public class CategoryTest(CategoryTestFixture fixture)
     {
         // GIVEN
         var category = fixture.GetActiveCategory();
-        category.UpdatedAt.Should().Be(default);
+        category.UpdatedAt.ShouldBe(default);
         var invalidName = fixture.GenerateName(minLength: 256);
         
         // WHEN
         var result = category.Update(name: invalidName);
         
         // THEN
-        result.IsFailure.Should().BeTrue();
-        result.Error.Should().Be("Name must contain at most 255 characters");
+        result.IsFailure.ShouldBeTrue();
+        result.Error.ShouldBe("Name must contain at most 255 characters");
     }
     
     [Fact]
@@ -267,19 +267,19 @@ public class CategoryTest(CategoryTestFixture fixture)
     {
         // GIVEN
         var category = fixture.GetActiveCategory();
-        category.UpdatedAt.Should().Be(default);
+        category.UpdatedAt.ShouldBe(default);
         var description = fixture.GenerateDescription();
         
         // WHEN
         var result = category.Update(description: description);
         
         // THEN
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Should().NotBeNull();
+        result.IsSuccess.ShouldBeTrue();
+        result.Value.ShouldNotBeNull();
         var updatedCategory = result.Value;
-        updatedCategory.Description.Should().Be(description);
-        updatedCategory.Name.Should().Be(category.Name);
-        updatedCategory.UpdatedAt.Should().NotBe(default);
+        updatedCategory.Description.ShouldBe(description);
+        updatedCategory.Name.ShouldBe(category.Name);
+        updatedCategory.UpdatedAt.ShouldNotBe(default);
     }
 
     [Fact]
@@ -288,15 +288,15 @@ public class CategoryTest(CategoryTestFixture fixture)
     {
         // GIVEN
         var category = fixture.GetActiveCategory();
-        category.UpdatedAt.Should().Be(default);
+        category.UpdatedAt.ShouldBe(default);
         var invalidDescription = fixture.GenerateDescription(minLength: 10001);
         
         // WHEN
         var result = category.Update(description: invalidDescription);
         
         // THEN
-        result.IsFailure.Should().BeTrue();
-        result.Error.Should().Be("Description must contain at most 10000 characters");
+        result.IsFailure.ShouldBeTrue();
+        result.Error.ShouldBe("Description must contain at most 10000 characters");
     }
     
     [Fact]
@@ -305,7 +305,7 @@ public class CategoryTest(CategoryTestFixture fixture)
     {
         // GIVEN
         var category = fixture.GetActiveCategory();
-        category.UpdatedAt.Should().Be(default);
+        category.UpdatedAt.ShouldBe(default);
         var name = fixture.GenerateName();
         var description = fixture.GenerateDescription();
         
@@ -313,11 +313,11 @@ public class CategoryTest(CategoryTestFixture fixture)
         var result = category.Update(name, description);
         
         // THEN
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Should().NotBeNull();
+        result.IsSuccess.ShouldBeTrue();
+        result.Value.ShouldNotBeNull();
         var updatedCategory = result.Value;
-        updatedCategory.Name.Should().Be(name);
-        updatedCategory.Description.Should().Be(description);
-        updatedCategory.UpdatedAt.Should().NotBe(default);
+        updatedCategory.Name.ShouldBe(name);
+        updatedCategory.Description.ShouldBe(description);
+        updatedCategory.UpdatedAt.ShouldNotBe(default);
     }
 }

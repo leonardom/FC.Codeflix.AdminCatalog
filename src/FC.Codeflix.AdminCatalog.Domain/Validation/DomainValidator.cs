@@ -1,8 +1,8 @@
-using FC.Codeflix.AdminCatalog.Domain.Common;
+using FC.Codeflix.AdminCatalog.SharedKernel;
 
 namespace FC.Codeflix.AdminCatalog.Domain.Validation;
 
-public static class DomainValidation
+public static class DomainValidator
 {
     public static Result NotBlank(string fieldName, string? value)
         => string.IsNullOrWhiteSpace(value) 
@@ -23,5 +23,4 @@ public static class DomainValidation
         => (!string.IsNullOrWhiteSpace(value) && value.Length > maxLength)
             ? Result.Failure($"{fieldName} must contain at most {maxLength} characters")
             : Result.Success();
-
 }

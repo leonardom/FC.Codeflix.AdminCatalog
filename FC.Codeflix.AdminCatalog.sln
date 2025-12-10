@@ -8,6 +8,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FC.Codeflix.AdminCatalog.Un
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FC.Codeflix.AdminCatalog.Domain", "src\FC.Codeflix.AdminCatalog.Domain\FC.Codeflix.AdminCatalog.Domain.csproj", "{0C92F14D-A24F-4905-AB98-3D3E64BFC45F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FC.Codeflix.AdminCatalog.Application", "src\FC.Codeflix.AdminCatalog.Application\FC.Codeflix.AdminCatalog.Application.csproj", "{AEB5C18B-5013-4820-B8BF-9183DAD48A06}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FC.Codeflix.AdminCatalog.SharedKernel", "src\FC.Codeflix.AdminCatalog.SharedKernel\FC.Codeflix.AdminCatalog.SharedKernel.csproj", "{2438277F-8786-4828-AA06-9EA72E9ABAEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,5 +26,19 @@ Global
 		{0C92F14D-A24F-4905-AB98-3D3E64BFC45F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C92F14D-A24F-4905-AB98-3D3E64BFC45F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C92F14D-A24F-4905-AB98-3D3E64BFC45F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEB5C18B-5013-4820-B8BF-9183DAD48A06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEB5C18B-5013-4820-B8BF-9183DAD48A06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEB5C18B-5013-4820-B8BF-9183DAD48A06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEB5C18B-5013-4820-B8BF-9183DAD48A06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2438277F-8786-4828-AA06-9EA72E9ABAEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2438277F-8786-4828-AA06-9EA72E9ABAEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2438277F-8786-4828-AA06-9EA72E9ABAEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2438277F-8786-4828-AA06-9EA72E9ABAEE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AEB5C18B-5013-4820-B8BF-9183DAD48A06} = {9688057E-E44A-41F9-8241-D176040E0358}
+		{0C92F14D-A24F-4905-AB98-3D3E64BFC45F} = {9688057E-E44A-41F9-8241-D176040E0358}
+		{86F64988-6817-4366-909F-E50B7E8A2B4F} = {951AABA2-AC74-42EC-ACF2-6A538AC9A4A2}
+		{2438277F-8786-4828-AA06-9EA72E9ABAEE} = {9688057E-E44A-41F9-8241-D176040E0358}
 	EndGlobalSection
 EndGlobal

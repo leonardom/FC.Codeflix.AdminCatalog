@@ -1,10 +1,10 @@
 using Bogus;
 using FC.Codeflix.AdminCatalog.Domain.Validation;
-using FluentAssertions;
+using Shouldly;
 
 namespace FC.Codeflix.AdminCatalog.UnitTests.Domain.Validation;
 
-public class DomainValidationTest
+public class DomainValidatorTest
 {
     private readonly Faker _faker = new();
     
@@ -12,8 +12,8 @@ public class DomainValidationTest
     public void ShouldNotReturnErrorWhenValueNotIsBlank()
     {
         var input = _faker.Name.FirstName();
-        var result = DomainValidation.NotBlank("FieldName", input);
-        result.IsSuccess.Should().BeTrue();
+        var result = DomainValidator.NotBlank("FieldName", input);
+        result.IsSuccess.ShouldBeTrue();
     }
     
     [Theory]
@@ -22,9 +22,9 @@ public class DomainValidationTest
     [InlineData(" ")]
     public void ShouldReturnErrorWhenValueIsBlank(string? input)
     {
-        var result = DomainValidation.NotBlank("FieldName", input);
-        result.IsFailure.Should().BeTrue();
-        result.Error.Should().Be("FieldName must not be blank");
+        var result = DomainValidator.NotBlank("FieldName", input);
+        result.IsFailure.ShouldBeTrue();
+        result.Error.ShouldBe("FieldName must not be blank");
     }
 
     [Theory]
@@ -33,16 +33,16 @@ public class DomainValidationTest
     [InlineData(10.12)]
     public void ShouldNotReturnErrorWhenValueIsNotNull(object input)
     {
-        var result = DomainValidation.NotNull("FieldName", input);
-        result.IsSuccess.Should().BeTrue();
+        var result = DomainValidator.NotNull("FieldName", input);
+        result.IsSuccess.ShouldBeTrue();
     }
     
     [Fact]
     public void ShouldReturnErrorWhenValueIsNull()
     {
-        var result = DomainValidation.NotNull("FieldName", null);
-        result.IsFailure.Should().BeTrue();
-        result.Error.Should().Be("FieldName must not be null");
+        var result = DomainValidator.NotNull("FieldName", null);
+        result.IsFailure.ShouldBeTrue();
+        result.Error.ShouldBe("FieldName must not be null");
     }
 
     [Theory]
@@ -50,8 +50,8 @@ public class DomainValidationTest
     [InlineData("abcdef1234xyz", 10)]
     public void ShouldNotReturnErrorWhenStringIsGreaterOrEqualThanMinLength(string? input, int minLength)
     {
-        var result = DomainValidation.MinLength("FieldName", minLength, input);
-        result.IsSuccess.Should().BeTrue();
+        var result = DomainValidator.MinLength("FieldName", minLength, input);
+        result.IsSuccess.ShouldBeTrue();
     }
     
     [Theory]
@@ -60,9 +60,9 @@ public class DomainValidationTest
     [InlineData("abcdef", 10)]
     public void ShouldReturnErrorWhenStringIsLessThanMinLength(string? input, int minLength)
     {
-        var result = DomainValidation.MinLength("FieldName", minLength, input);
-        result.IsFailure.Should().BeTrue();
-        result.Error.Should().Be($"FieldName must contain at least {minLength} characters");
+        var result = DomainValidator.MinLength("FieldName", minLength, input);
+        result.IsFailure.ShouldBeTrue();
+        result.Error.ShouldBe($"FieldName must contain at least {minLength} characters");
     }
     
     [Theory]
@@ -71,8 +71,8 @@ public class DomainValidationTest
     [InlineData("abcdef1234", 10)]
     public void ShouldNotReturnErrorWhenStringIsLessOrEqualThanMaxLength(string? input, int maxLength)
     {
-        var result = DomainValidation.MaxLength("FieldName", maxLength, input);
-        result.IsSuccess.Should().BeTrue();
+        var result = DomainValidator.MaxLength("FieldName", maxLength, input);
+        result.IsSuccess.ShouldBeTrue();
     }
     
     [Theory]
@@ -80,8 +80,8 @@ public class DomainValidationTest
     [InlineData("abcdef1234xyz9", 10)]
     public void ShouldReturnErrorWhenStringIsGreaterThanMaxLength(string? input, int maxLength)
     {
-        var result = DomainValidation.MaxLength("FieldName", maxLength, input);
-        result.IsFailure.Should().BeTrue();
-        result.Error.Should().Be($"FieldName must contain at most {maxLength} characters");
+        var result = DomainValidator.MaxLength("FieldName", maxLength, input);
+        result.IsFailure.ShouldBeTrue();
+        result.Error.ShouldBe($"FieldName must contain at most {maxLength} characters");
     }
 }

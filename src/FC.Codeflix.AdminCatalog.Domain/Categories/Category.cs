@@ -1,8 +1,7 @@
-﻿using FC.Codeflix.AdminCatalog.Domain.Common;
-using FC.Codeflix.AdminCatalog.Domain.SeedWork;
-using FC.Codeflix.AdminCatalog.Domain.Validation;
+﻿using FC.Codeflix.AdminCatalog.Domain.Validation;
+using FC.Codeflix.AdminCatalog.SharedKernel;
 
-namespace FC.Codeflix.AdminCatalog.Domain.Entity;
+namespace FC.Codeflix.AdminCatalog.Domain.Categories;
 
 public class Category : AggregateRoot
 {
@@ -12,7 +11,7 @@ public class Category : AggregateRoot
     
     public string Name { get; private set; }
     public string Description { get; private set; }
-    public DateTime CreatedAt { get; init; }
+    public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
     public bool IsActive { get; private set; }
     
@@ -26,28 +25,22 @@ public class Category : AggregateRoot
     
     private Result<Category> Validate()
     {
-        var result = DomainValidation.NotBlank(nameof(Name), Name);
+        var result = DomainValidator.NotBlank(nameof(Name), Name);
         if (result.IsFailure) return Result.Failure<Category>(result.Error);
         
-        result = DomainValidation.MinLength(nameof(Name), MinNameLength, Name);
+        result = DomainValidator.MinLength(nameof(Name), MinNameLength, Name);
         if (result.IsFailure) return Result.Failure<Category>(result.Error);
         
-        result = DomainValidation.MaxLength(nameof(Name), MaxNameLength, Name);
+        result = DomainValidator.MaxLength(nameof(Name), MaxNameLength, Name);
         if (result.IsFailure) return Result.Failure<Category>(result.Error);
 
-        result = DomainValidation.NotBlank(nameof(Description), Description);
+        result = DomainValidator.NotBlank(nameof(Description), Description);
         if (result.IsFailure) return Result.Failure<Category>(result.Error);
 
-        result = DomainValidation.MaxLength(nameof(Description), MaxDescriptionLength, Description);
+        result = DomainValidator.MaxLength(nameof(Description), MaxDescriptionLength, Description);
         return result.IsFailure ? Result.Failure<Category>(result.Error) : Result.Success(this);
     }
-
-    public static Result<Category> Create(string name, string description, bool isActive = true)
-    {
-        return new Category(name, description, isActive)
-            .Validate();
-    }
-
+    
     public Result<Category> Activate()
     {
         IsActive = true;
@@ -68,5 +61,19 @@ public class Category : AggregateRoot
         Description = description ?? Description;
         UpdatedAt = DateTime.UtcNow;
         return Validate();
+    }
+    
+    public static Result<Category> Create(string name, string description, bool isActive = true)
+        => new Category(name, description, isActive).Validate();
+
+    public static Result<Category> Restore(Guid id, string name, string description, bool isActive, DateTime createdAt, DateTime updatedAt)
+    {
+        var category = new Category(name, description, isActive)
+        {
+            Id = id,
+            CreatedAt = createdAt,
+            UpdatedAt = createdAt
+        };
+        return Result.Success(category);
     }
 }

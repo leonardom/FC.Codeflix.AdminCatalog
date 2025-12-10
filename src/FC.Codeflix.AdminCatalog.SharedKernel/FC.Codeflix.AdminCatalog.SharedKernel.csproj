@@ -6,8 +6,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\FC.Codeflix.AdminCatalog.SharedKernel\FC.Codeflix.AdminCatalog.SharedKernel.csproj" />
-    </ItemGroup>
-
 </Project>

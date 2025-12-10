@@ -7,7 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\FC.Codeflix.AdminCatalog.SharedKernel\FC.Codeflix.AdminCatalog.SharedKernel.csproj" />
+      <ProjectReference Include="..\FC.Codeflix.AdminCatalog.Domain\FC.Codeflix.AdminCatalog.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FluentValidation" Version="12.1.1" />
     </ItemGroup>
 
 </Project>

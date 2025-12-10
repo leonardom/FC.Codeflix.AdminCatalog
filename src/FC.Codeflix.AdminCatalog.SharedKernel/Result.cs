@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace FC.Codeflix.AdminCatalog.Domain.Common;
+namespace FC.Codeflix.AdminCatalog.SharedKernel;
 
 public class Result
 {
@@ -17,8 +17,9 @@ public class Result
     public static Result Success() => new(true, string.Empty);
     public static Result Failure(string error) => new(false, error);
     public static Result<T> Success<T>(T value) => new(value, true, string.Empty);
-    public static Result<T> Failure<T>(string error) => new(default, false, error);
-    public static Result<T> Create<T>(T? value) 
+    public static Result<T> Failure<T>(string error) => new(default!, false, error);
+
+    protected static Result<T> Create<T>(T? value) 
         => value is not null ? Success(value) : Failure<T>("Result has no value");
 }
 
