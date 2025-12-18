@@ -15,11 +15,11 @@ public class Category : AggregateRoot
     public DateTime UpdatedAt { get; private set; }
     public bool IsActive { get; private set; }
     
-    private Category(string name, string description, bool active)
+    private Category(string name, string description, bool isActive)
     {
         Name = name;
         Description = description;
-        IsActive = active;
+        IsActive = isActive;
         CreatedAt = DateTime.UtcNow;
     }
     
