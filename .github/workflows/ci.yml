@@ -1,0 +1,54 @@
+name: CI Pipepline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  # 1. BUILD JOB: Compiles code and generates the Sonar analysis cache
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Build
+        run: |
+          dotnet build --no-incremental
+
+      # CRITICAL: Save the workspace, including hidden .sonar & build artifacts
+      - name: Upload Workspace Cache
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-workspace
+          path: .
+          include-hidden-files: true
+
+  # 2. TEST JOB: Runs independently to generate coverage reports
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download Workspace Cache
+        uses: actions/download-artifact@v4
+        with:
+          name: build-workspace
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Run Tests
+        run: dotnet test --no-build --logger trx /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+
+      # Share test results back for Sonar to read
+      - name: Upload Coverage Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-reports
+          path: "**/coverage.opencover.xml"
